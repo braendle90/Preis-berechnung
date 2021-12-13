@@ -1,0 +1,49 @@
+﻿@model PriceCalculation.ViewModels.CreateLogoViewModel
+
+@{
+    ViewData["Title"] = "ShowLogo";
+}
+
+<h1>ShowLogo</h1>
+
+<h4>CreateLogoViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateLogo" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OfferId" class="control-label"></label>
+                <input asp-for="OfferId" class="form-control" />
+                <span asp-validation-for="OfferId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LogoName" class="control-label"></label>
+                <input asp-for="LogoName" class="form-control" />
+                <span asp-validation-for="LogoName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LogoSurfaceSize" class="control-label"></label>
+                <input asp-for="LogoSurfaceSize" class="form-control" />
+                <span asp-validation-for="LogoSurfaceSize" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ColorId" class="control-label"></label>
+                <select asp-for="ColorId" class="form-control" asp-items="@(new SelectList(Model.ColorList,"Id","ColorName"))"></select>
+                <span asp-validation-for="ColorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,80 @@
+﻿@model IEnumerable<PriceCalculation.ViewModels.ListOfPositionLogoViewModel>
+
+@{
+    ViewData["Title"] = "ShowTable";
+}
+
+<h1>ShowTable</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().OrderPositionLogo.Order.Textil.TextilName)</th>
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().OrderPositionLogo.Order.TextilColor.TextilColorName)</th>
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().OrderPositionLogo.Order.NumberOfPieces)</th>
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().OrderPositionLogo.Order.OfferId)</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @item.OrderPositionLogo.Order.Textil.TextilName
+                </td>
+                <td>
+                    @item.OrderPositionLogo.Order.TextilColor.TextilColorName
+                </td>
+                <td>
+                    @item.OrderPositionLogo.Order.NumberOfPieces
+                </td>
+                <td>
+                    @item.OrderPositionLogo.Order.OfferId
+                </td>
+            </tr>
+
+
+            @foreach (var data in item.PositionsLogos)
+            {
+                <tr>
+                    <div class="mr-5">
+
+
+                    <th>
+                        @data.Logo.LogoName
+                    </th>
+                    <th>
+                        @data.Logo.LogoSurfaceSize cm²
+                    </th>
+                    <th>
+                        @data.Position.PositionName
+                    </th>
+
+                    </div>
+                </tr>
+
+
+            }
+
+
+
+
+
+            <tr>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

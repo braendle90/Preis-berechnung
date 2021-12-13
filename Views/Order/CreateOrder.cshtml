@@ -1,0 +1,47 @@
+﻿@model PriceCalculation.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "CreateOrder";
+}
+
+<h1>CreateOrder</h1>
+
+<h4>OrderViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="CreateOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="OfferId" readonly class="form-control" />
+            <div class="form-group">
+                <label asp-for="NumberOfPieces" class="control-label"></label>
+                <input asp-for="NumberOfPieces" class="form-control" />
+                <span asp-validation-for="NumberOfPieces" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TextilColorId" class="control-label"></label>
+                <select asp-for="TextilColorId" class="form-control" asp-items="@(new SelectList(Model.TextilColorList,"Id","TextilColorName"))"></select>
+                <span asp-validation-for="TextilColorId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="TextilId" class="control-label"></label>
+                <select asp-for="TextilId" class="form-control" asp-items="@(new SelectList(Model.TextilList,"Id","TextilName"))"></select>
+                <span asp-validation-for="TextilId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

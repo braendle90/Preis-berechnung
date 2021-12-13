@@ -1,0 +1,90 @@
+﻿@model PriceCalculation.ViewModels.CreateLogoViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<h1>Logos</h1>
+
+<form asp-action="CreateLogo" asp-controller="Order" method="post">
+
+
+    <div id="first">
+
+        <div id="content_background" class="makebackground" style="border:medium">
+            @*Hier beginnt content*@
+            @*<div id="content_background" style="background-color: white;">*@
+
+            <input type="hidden" id="id" value="1">
+
+            <div id="divTxt" class="row mh-100">
+
+
+                <div class="input-group mb-3">
+                    <label class="input-group-text">@Html.DisplayNameFor(m => m.ColorId)</label>
+                    <select name="[0].ColorId" id="ColorId" class="custom-select" asp-items="@(new SelectList(Model.ColorList,"Id","ColorName"))"></select>
+                    <span asp-validation-for="ColorId" class="text-danger"></span>
+                </div>
+                    
+
+                <div class="input-group mb-3">
+                    <label asp-for="OfferId" class="input-group-text"></label>
+                    <input name="[0].OfferId" value="@Model.OfferId" class="form-control" />
+                    <span asp-validation-for="OfferId" class="text-danger"></span>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="input-group-text">@Html.DisplayNameFor(m => m.LogoName)</label>
+                    <input type="text" name="[0].LogoName" id="LogoName" class="form-control" />
+                    <span asp-validation-for="LogoName" class="text-danger"></span>
+                </div>
+
+                <div class="input-group mb-3">
+                    <label class="input-group-text">@Html.DisplayNameFor(m => m.LogoSurfaceSize)</label>
+                    <input type="text"
+                           name="[0].LogoSurfaceSize" id="LogoSurfaceSize" class="form-control" />
+                    <span asp-validation-for="LogoSurfaceSize" class="text-danger"></span>
+                </div>
+            </div>
+            @*</div>*@
+            @*Hier endet content*@
+
+        </div>
+
+    </div>
+
+
+
+    <div class="float-start mt-3 float-start">
+        <a href="#" onClick="addFormFieldLogo(); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26   " fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"></path>
+            </svg>
+        </a>
+
+
+
+
+
+    </div>
+
+    <div class="float-start">
+        <button type="submit" id="addtoLogo" class="btn btn-primary mt-3">Weiter</button>
+    </div>
+
+
+
+</form>
+
+
+
+
+@section Scripts {
+
+    <script>
+
+         var JsonModelShirt = @Html.Raw(Json.Serialize(Model));
+
+
+    </script>
+
+}
