@@ -18,5 +18,7 @@ namespace PriceCalculation.Data
         public DbSet<PositionLogo> PositionLogos { get; set; }
         public DbSet<Textil> Textils { get; set; }
         public DbSet<TextilColor> TextilColors { get; set; }
+        public DbSet<RangeTable> RangeTable { get; set; }
+        public DbSet<PriceTable> PriceTable { get; set; }
     }
 }

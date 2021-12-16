@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PriceCalculation.Data;
 using PriceCalculation.Models;
+using PriceCalculation.Repository;
 using PriceCalculation.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace PriceCalculation.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICalculationPiecesLogoandPosition _calcRepo;
 
-        public OrderController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public OrderController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ICalculationPiecesLogoandPosition calcRepo)
         {
             this._context = context;
             this._userManager = userManager;
+            this._calcRepo = calcRepo;
         }
         public IActionResult Index()
         {
@@ -199,8 +202,6 @@ namespace PriceCalculation.Controllers
 
             var positionLogoList = new List<PositionLogo>();
 
-
-
             string OfferId = "";
 
             foreach (var item in model)
@@ -232,10 +233,9 @@ namespace PriceCalculation.Controllers
 
 
 
-
-
             return RedirectToAction("ShowTable", new { offerId = OfferId });
         }
+
 
         public async Task<IActionResult> ShowTable(string Offerid)
         {
@@ -254,67 +254,90 @@ namespace PriceCalculation.Controllers
                 .Include(x => x.Order.TextilColor)
                 .Include(x => x.User)
                 .Where(x => x.Order.OfferId == Offerid).ToList();
+            
 
-            //@item.OrderPositionLogo.Order.OfferId
+            // Preisberechnung
+
+            var ListofLogosWithDupes = new List<int>();
+            var ListofPositionsWithDupes = new List<int>();
+
+            //Create Alist of all LogoId and PositionID
+            foreach (var item in PositonLogoList)
+            {
+                ListofLogosWithDupes.Add(item.Logo.Id);
+                ListofPositionsWithDupes.Add(item.Position.Id);
+            }
+
+
+            //Distinct that Logo and Positon List
+            var ListofLogosDistinct = ListofLogosWithDupes.Distinct().ToList();
+            var ListofPositionsDistinct = ListofPositionsWithDupes.Distinct().ToList();
+
+
+            var oneLogoPositionPieces = new List<OneLogoAndPosition>();
+
+            foreach (var logoid in ListofLogosDistinct)
+            {
+                foreach (var positionId in ListofPositionsDistinct)
+                {
+                    var notNullReturnModel = _calcRepo.calc(logoid, positionId,_context);
+
+                    if (notNullReturnModel != null)
+                    {
+                        oneLogoPositionPieces.Add(notNullReturnModel);
+                    }
+                }
+
+            }
 
            
 
 
-            var list = new List<ListOfPositionLogoViewModel>();
+
+            var list = new List<TestViewModel>();
 
             foreach (var item in opl)
             {
 
-                var listPositionLogo = new List<PositionLogo>();
+                var listPositionLogo = new List<ShowPriceModel>();
+                var listOfPositionLogoViews = new TestViewModel();
 
                 foreach (var data in PositonLogoList)
                 {
 
 
+                     var fillModel = oneLogoPositionPieces
+                        .Where(x => x.Logo == data.Logo )
+                        .Where(x => x.Position == data.Position)
+                        .FirstOrDefault();
+
+                    var showPriceModel = new ShowPriceModel
+                    {
+                        Logo = data.Logo,
+                        Position = data.Position,
+                        OrderPositionLogo = data.OrderPositionLogo,
+                        PiecesofTextilWithThisLogo = fillModel.Pieces,
+                        PricePerPices = _calcRepo.priceOfPrint(data, fillModel.Pieces,_context),
+
+                    };
+
+               
+
                     if (item.Id == data.OrderPositionLogo.Id)
                     {
-
-                        listPositionLogo.Add(data);
-
-                        var listOfPositionLogoViews = new ListOfPositionLogoViewModel
-                        {
-
-                            OrderPositionLogo = item,
-                            PositionsLogos = listPositionLogo,
-
-                        };
-
-
-                        list.Add(listOfPositionLogoViews);
+                        listPositionLogo.Add(showPriceModel);
+                        listOfPositionLogoViews.OrderPositionLogo = item;
+                        listOfPositionLogoViews.ShowPriceModel = listPositionLogo;
                     }
+
                 }
-
-          
-
+                list.Add(listOfPositionLogoViews);
             }
 
 
-            var displayTablesOfOrderViewModel = new DisplayTablesOfOrderViewModel
-            {
 
-                ListOfPositionLogoViews = list,
-
-
-            };
-
-
-
-
-
-
-            var Offernew = Offerid;
-
-
-            return View(list);
+            return View("ShowTableTeetView",list);
         }
-
-
-
 
 
     }

@@ -114,7 +114,7 @@ namespace PriceCalculation.Controllers
                 .Where(x => x.User == user)
                 .AsEnumerable()
                 .GroupBy(x => x.Order.OfferId)
-                .Select(grp => new TestViewModel
+                .Select(grp => new ShowTableVieModel
                 {
                     OfferId = grp.Key, OrderPostionLogoListe = grp.ToList()
                 })

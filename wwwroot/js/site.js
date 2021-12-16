@@ -14,9 +14,6 @@
 function addFormField() {
 
 
-
-
-
     var content = document.getElementById("content_background").innerHTML;
 
 
@@ -278,18 +275,71 @@ function removeFormFieldLogo(idR) {
 
 //------------------  Position Site ------------------ /////
 
+
+
 function BackgroundToggle() {
-    var orders = document.getElementById();
-    var x = document.getElementsByName("content");
-    var i;
-    for (i = 0; i < x.length; i++) {
-            if (i % 2 === 0) {
-            x[i].style.backgroundColor = "grey";
+
+
+    var readDataset = document.querySelector('#contentCopy_0').dataset.row;
+
+    var contentIndex = 0;
+
+    for (var i = 0; i < readDataset; i++) {
+
+        contentIndex = "content_" + i;
+
+        var x = document.getElementsByName(contentIndex);
+        
+        for (var d = 0; d < x.length; d++) {
+            if (d % 2 === 0) {
+                x[d].style.backgroundColor = "white";
+
 
             } else {
-            x[i].style.backgroundColor = "white";
+                x[d].style.backgroundColor = "grey";
+            }
         }
     }
+
+    return contentIndex;
+}
+
+function updateName() {
+
+    var positionIdUpdateIndex = 0;
+    var LogoIdUpdateIndex = 0;
+    var OrderIdUpdateIndex = 0;
+
+    var contentIndex = 0;
+
+    var x = "";
+
+    var ListClassToUpdate = document.getElementsByClassName("form-control");
+
+    var updatePosition = document.querySelectorAll("[data-isPositionUpdate]");
+    var updateLogo = document.querySelectorAll("[data-isLogoUpdate]");
+    var OrderIdUpdate = document.querySelectorAll("[data-isOrderUpdate]");
+   
+
+    for (var i = 0; i < updatePosition.length; i++) {
+        updatePosition[i].name = "[" + positionIdUpdateIndex + "].PositionId";
+
+        positionIdUpdateIndex++;
+    }
+
+    for (var i = 0; i < updateLogo.length; i++) {
+        updateLogo[i].name = "[" + LogoIdUpdateIndex + "].LogoId";
+
+        LogoIdUpdateIndex++;
+    }
+
+    for (var i = 0; i < OrderIdUpdate.length; i++) {
+        OrderIdUpdate[i].name = "[" + OrderIdUpdateIndex + "].OrderId";
+
+        OrderIdUpdateIndex++;
+    }
+
+
 }
 
 
@@ -311,14 +361,15 @@ function addFormFieldPosition(r, index, contentIndex) {
 
     var newDiv = document.createElement("div");
     newDiv.style.backgroundColor = 'grey';
-    newDiv.setAttribute("name", "content");
-   
+
+
+    var contentIndex = BackgroundToggle();
+
+    newDiv.setAttribute("name", contentIndex);
+
+
     var newContent = document.createTextNode(content);
     newDiv.innerHTML = content; // füge den Textknoten zum neu erstellten div hinzu.
-
-
-
-    BackgroundToggle()
 
 
     /* document.getElementById("wrapper").style.background = "#e2e2e2";*/
@@ -366,6 +417,8 @@ function addFormFieldPosition(r, index, contentIndex) {
 
     id = id - 1 + 2;
     document.getElementById("id").value = id;
+
+    updateName();
 }
 
 function removeFormFieldLogo(idR) {

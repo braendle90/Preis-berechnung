@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace PriceCalculation.ViewModels
 {
-    public class TestViewModel
+    public class ShowTableVieModel
     {
 
         public int Id { get; set; }
-
-        public OrderPositionLogo OrderPositionLogo { get; set; }
-
-        public List<ShowPriceModel> ShowPriceModel { get; set; }
+        public string OfferId { get; set; }
+        public List<OrderPositionLogo> OrderPostionLogoListe { get; set; }
     }
 }

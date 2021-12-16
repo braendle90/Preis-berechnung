@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PriceCalculation.Data;
 using PriceCalculation.Models;
+using PriceCalculation.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,9 @@ namespace PriceCalculation
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            // Eigene Methode
+            services.AddScoped<ICalculationPiecesLogoandPosition, CalculationPiecesLogoandPosition>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +71,9 @@ namespace PriceCalculation
                     pattern: "{controller=Order}/{action=CreateOrder}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+
+
         }
     }
 }
